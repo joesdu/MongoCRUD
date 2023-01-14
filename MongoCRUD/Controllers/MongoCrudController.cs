@@ -64,6 +64,7 @@ public class MongoCrudController : ControllerBase
         return await _db.Person.Find(_bf.Eq(c => c.Index, 0)).ToListAsync();
     }
 
+    [HttpPut("one/{index:int}")]
     public async Task UpdateOne(int index)
     {
         // 展示拉姆达表达式的条件方式,以及第三个可选参数的配置.
