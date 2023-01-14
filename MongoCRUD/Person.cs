@@ -17,7 +17,7 @@ public class Person
     /// <summary>
     /// 数据ID
     /// </summary>
-    public int Id { get; set; }
+    public string Id { get; set; } = string.Empty;
     /// <summary>
     /// 和例子中的数据结构同步
     /// </summary>
