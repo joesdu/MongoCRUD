@@ -1,6 +1,7 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Conventions;
+using MongoDB.Bson.Serialization.IdGenerators;
 using MongoDB.Bson.Serialization.Serializers;
 
 namespace MongoCRUD;
@@ -27,17 +28,37 @@ public static class MongoExtension
     /// </summary>
     private static void RegistryConventionPack(bool first = true)
     {
-        if (!first) return;
-        var pack = new ConventionPack
+        if (first)
+        {
+            var pack = new ConventionPack
         {
             new CamelCaseElementNameConvention(),// 驼峰命名字段
             new IgnoreExtraElementsConvention(true),
             new NamedIdMemberConvention("Id","ID"),// 将_id字段映射为Id或者ID
             new EnumRepresentationConvention(BsonType.String),// 将枚举类型存储为字符串值
         };
-        ConventionRegistry.Register($"hoyo-pack-{Guid.NewGuid()}", pack, _ => true);
-        BsonSerializer.RegisterSerializer(new DateTimeSerializer(DateTimeKind.Local));// 将时间转化为本地时间
-        BsonSerializer.RegisterSerializer(new DecimalSerializer(BsonType.Decimal128));
-        BsonSerializer.RegisterSerializer(new DateOnlySerializer());
+            ConventionRegistry.Register($"hoyo-pack-{Guid.NewGuid()}", pack, _ => true);
+            BsonSerializer.RegisterSerializer(new DateTimeSerializer(DateTimeKind.Local));// 将时间转化为本地时间
+            BsonSerializer.RegisterSerializer(new DecimalSerializer(BsonType.Decimal128));
+            BsonSerializer.RegisterSerializer(new DateOnlySerializer());
+        }
+        var idpack = new ConventionPack
+        {
+            new StringObjectIdIdGeneratorConvention()//Id[string] mapping ObjectId
+        };
+        ConventionRegistry.Register($"id-pack{Guid.NewGuid()}", idpack, _ => true);
+    }
+}
+
+/// <summary>
+/// map the [BsonRepresentation(MongoDB.Bson.BsonType.ObjectId]
+/// </summary>
+internal class StringObjectIdIdGeneratorConvention : ConventionBase, IPostProcessingConvention
+{
+    public void PostProcess(BsonClassMap classMap)
+    {
+        var idMemberMap = classMap.IdMemberMap;
+        if (idMemberMap is null || idMemberMap.IdGenerator is not null) return;
+        if (idMemberMap.MemberType == typeof(string)) _ = idMemberMap.SetIdGenerator(StringObjectIdGenerator.Instance).SetSerializer(new StringSerializer(BsonType.ObjectId));
     }
 }
