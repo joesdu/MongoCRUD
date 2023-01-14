@@ -31,12 +31,12 @@ public static class MongoExtension
         if (first)
         {
             var pack = new ConventionPack
-        {
-            new CamelCaseElementNameConvention(),// 驼峰命名字段
-            new IgnoreExtraElementsConvention(true),
-            new NamedIdMemberConvention("Id","ID"),// 将_id字段映射为Id或者ID
-            new EnumRepresentationConvention(BsonType.String),// 将枚举类型存储为字符串值
-        };
+            {
+                new CamelCaseElementNameConvention(),// 驼峰命名字段
+                new IgnoreExtraElementsConvention(true),
+                new NamedIdMemberConvention("Id","ID"),// 将_id字段映射为Id或者ID
+                new EnumRepresentationConvention(BsonType.String),// 将枚举类型存储为字符串值
+            };
             ConventionRegistry.Register($"hoyo-pack-{Guid.NewGuid()}", pack, _ => true);
             BsonSerializer.RegisterSerializer(new DateTimeSerializer(DateTimeKind.Local));// 将时间转化为本地时间
             BsonSerializer.RegisterSerializer(new DecimalSerializer(BsonType.Decimal128));
