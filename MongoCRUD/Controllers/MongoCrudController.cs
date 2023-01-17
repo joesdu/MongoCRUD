@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using MongoCRUD.Models;
 using MongoDB.Driver;
 
 namespace MongoCRUD.Controllers;

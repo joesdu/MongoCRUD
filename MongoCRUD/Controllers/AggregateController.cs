@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MongoCRUD.Models;
 using MongoDB.Driver;
 
 namespace MongoCRUD.Controllers;
-[Route("api/[controller]")]
-[ApiController]
+[Route("api/[controller]"), ApiController]
 public class AggregateController : ControllerBase
 {
     private readonly DbContext _db;

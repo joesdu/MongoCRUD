@@ -1,4 +1,4 @@
-﻿namespace MongoCRUD;
+﻿namespace MongoCRUD.Models;
 /// <summary>
 /// 人
 /// </summary>
