@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using MongoDB.Driver;
 
 namespace MongoCRUD.Controllers;
-[ApiController, Route("[controller]")]
+[ApiController, Route("api/[controller]")]
 public class MongoCrudController : ControllerBase
 {
     private readonly DbContext _db;
@@ -14,7 +14,7 @@ public class MongoCrudController : ControllerBase
     private readonly FilterDefinitionBuilder<Person> _bf = Builders<Person>.Filter;
     private readonly UpdateDefinitionBuilder<Person> _bu = Builders<Person>.Update;
 
-    [HttpPost("one")]
+    [HttpPost("One")]
     public async Task<Person> InsertOne()
     {
         // 这里我们不需要为 Id 字段赋值,因为插入成功后,会自动为Id字段绑定值.
@@ -31,7 +31,7 @@ public class MongoCrudController : ControllerBase
         return person;
     }
 
-    [HttpPost("many")]
+    [HttpPost("Many")]
     public async Task<IEnumerable<Person>> InsertMany()
     {
         var list = new List<Person>();
@@ -50,7 +50,7 @@ public class MongoCrudController : ControllerBase
         return list;
     }
 
-    [HttpGet("all")]
+    [HttpGet("All")]
     public async Task<IEnumerable<Person>> FindAll()
     {
         // return await _db.Person.Find("{}").ToListAsync();
@@ -64,7 +64,7 @@ public class MongoCrudController : ControllerBase
         return await _db.Person.Find(_bf.Eq(c => c.Index, 0)).ToListAsync();
     }
 
-    [HttpPut("one/{index:int}")]
+    [HttpPut("One/{index:int}")]
     public async Task UpdateOne(int index)
     {
         // 展示拉姆达表达式的条件方式,以及第三个可选参数的配置.
@@ -77,7 +77,7 @@ public class MongoCrudController : ControllerBase
         _ = await _db.Person.UpdateManyAsync(_bf.Eq(c => c.Index, 0), _bu.Set(c => c.Name, "李四"));
     }
 
-    [HttpDelete("one/{index:int}")]
+    [HttpDelete("One/{index:int}")]
     public async Task DeleteOne(int index)
     {
         _ = await _db.Person.DeleteOneAsync(c => c.Index == index);
@@ -85,7 +85,7 @@ public class MongoCrudController : ControllerBase
         //_ = await _db.Person.DeleteOneAsync(_bf.Eq(c => c.Index, index));
     }
 
-    [HttpDelete("many")]
+    [HttpDelete("Many")]
     public async Task DeleteMany()
     {
         var indexs = new[] { 12, 25, 14, 36, 95, 42 };
