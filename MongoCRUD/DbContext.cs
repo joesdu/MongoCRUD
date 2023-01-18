@@ -14,4 +14,12 @@ public sealed class DbContext : BaseDbContext
     /// 家庭信息
     /// </summary>
     public IMongoCollection<FamilyInfo> FamilyInfo => Database.GetCollection<FamilyInfo>("family.info");
+    /// <summary>
+    /// 可爱猫猫
+    /// </summary>
+    public IMongoCollection<Cat> Cat => Database.GetCollection<Cat>("cute.cat");
+    /// <summary>
+    /// 可爱狗狗
+    /// </summary>
+    public IMongoCollection<Dog> Dog => Database.GetCollection<Dog>("cute.dog");
 }
