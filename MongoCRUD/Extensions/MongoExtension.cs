@@ -4,7 +4,7 @@ using MongoDB.Bson.Serialization.Conventions;
 using MongoDB.Bson.Serialization.IdGenerators;
 using MongoDB.Bson.Serialization.Serializers;
 
-namespace MongoCRUD;
+namespace MongoCRUD.Extensions;
 
 public static class MongoExtension
 {
@@ -42,11 +42,11 @@ public static class MongoExtension
             BsonSerializer.RegisterSerializer(new DecimalSerializer(BsonType.Decimal128));
             BsonSerializer.RegisterSerializer(new DateOnlySerializer());
         }
-        var idpack = new ConventionPack
+        var id_pack = new ConventionPack
         {
             new StringObjectIdIdGeneratorConvention()//Id[string] mapping ObjectId
         };
-        ConventionRegistry.Register($"id-pack{Guid.NewGuid()}", idpack, _ => true);
+        ConventionRegistry.Register($"id-pack{Guid.NewGuid()}", id_pack, _ => true);
     }
 }
 

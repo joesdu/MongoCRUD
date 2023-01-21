@@ -1,5 +1,6 @@
-using System.Text.Json.Serialization;
 using MongoCRUD;
+using MongoCRUD.Extensions;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +15,13 @@ builder.Services.AddSwaggerGen();
 
 var dbStr = builder.Configuration.GetConnectionString("Mongo");
 builder.Services.AddMongoDbContext<DbContext>(dbStr!);
+
+#endregion
+
+#region GridFS服务注入
+
+// 由于我们BaseDbContext中已经注入了IMongoClient所以这里不需要显示传入db参数.否则需要显示传入.
+builder.Services.AddHoyoGridFS();
 
 #endregion
 
