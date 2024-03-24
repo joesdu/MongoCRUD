@@ -1,40 +1,50 @@
+using EasilyNET.Mongo.ConsoleDebug;
+using EasilyNET.MongoSerializer.AspNetCore;
 using MongoCRUD;
-using MongoCRUD.Extensions;
+using MongoDB.Driver.Linq;
+using Serilog;
+using Serilog.Events;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// 添加Serilog配置
+builder.Host.UseSerilog((hbc, lc) =>
+{
+    const LogEventLevel logLevel = LogEventLevel.Information;
+    lc.ReadFrom.Configuration(hbc.Configuration)
+      .MinimumLevel.Override("Microsoft", logLevel)
+      .MinimumLevel.Override("System", logLevel)
+      .Enrich.FromLogContext()
+      .WriteTo.Async(wt => wt.SpectreConsole());
+});
 // Add services to the container.
-
 builder.Services.AddControllers().AddJsonOptions(c => c.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
-#region MongoDB服务注入
-
-var dbStr = builder.Configuration.GetConnectionString("Mongo");
-builder.Services.AddMongoDbContext<DbContext>(dbStr!);
-
-#endregion
-
-#region GridFS服务注入
-
-// 由于我们BaseDbContext中已经注入了IMongoClient所以这里不需要显示传入db参数.否则需要显示传入.
-builder.Services.AddHoyoGridFS();
-
-#endregion
-
+// 注册MongoDB的一些东西
+builder.Services.AddMongoContext<DbContext>(builder.Configuration, op =>
+{
+    op.ClientSettings = cs =>
+    {
+        cs.ClusterConfigurator = s => s.Subscribe(new ActivityEventSubscriber());
+        cs.LinqProvider = LinqProvider.V3;
+    };
+    op.DefaultConventionRegistry = true;
+});
+// 注册自定义的MongoDB类型序列化
+builder.Services.RegisterSerializer(new DateOnlySerializerAsString());
+builder.Services.RegisterSerializer(new TimeOnlySerializerAsString());
+// 注册GridFS
+builder.Services.AddMongoGridFS();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    _ = app.UseSwagger().UseSwaggerUI();
+    app.UseSwagger().UseSwaggerUI();
 }
-
 app.UseAuthorization();
-
 app.MapControllers();
-
 app.Run();

@@ -4,18 +4,14 @@ using MongoDB.Driver;
 using MongoDB.Driver.GridFS;
 
 namespace MongoCRUD.Controllers;
+
 [Route("api/[controller]"), ApiController]
-public class GridFSController : ControllerBase
+public class GridFSController(GridFSBucket bucket) : ControllerBase
 {
     /// <summary>
     /// GridFSBucket
     /// </summary>
-    private readonly GridFSBucket Bucket;
-
-    public GridFSController(GridFSBucket bucket)
-    {
-        Bucket = bucket;
-    }
+    private readonly GridFSBucket Bucket = bucket;
 
     private readonly FilterDefinitionBuilder<GridFSFileInfo> gbf = Builders<GridFSFileInfo>.Filter;
 
@@ -93,7 +89,7 @@ public class GridFSController : ControllerBase
     public async Task<FileContentResult> FileContent(string id)
     {
         var fi = await (await Bucket.FindAsync(gbf.Eq(c => c.Id, ObjectId.Parse(id)))).SingleOrDefaultAsync() ?? throw new("no data find");
-        var bytes = await Bucket.DownloadAsBytesAsync(ObjectId.Parse(id), new GridFSDownloadOptions() { Seekable = true });
+        var bytes = await Bucket.DownloadAsBytesAsync(ObjectId.Parse(id), new() { Seekable = true });
         return File(bytes, fi.Metadata["contentType"].AsString, fi.Filename);
     }
 
@@ -109,6 +105,7 @@ public class GridFSController : ControllerBase
         var bytes = await Bucket.DownloadAsBytesByNameAsync(name, new() { Seekable = true });
         return File(bytes, fi.Metadata["contentType"].AsString, fi.Filename);
     }
+
     /// <summary>
     /// 重命名文件
     /// </summary>
@@ -129,13 +126,14 @@ public class GridFSController : ControllerBase
     [HttpDelete]
     public async Task<IEnumerable<string>> Delete(params string[] ids)
     {
-        var oids=ids.Select(ObjectId.Parse).ToList();
-        var fi = await (await Bucket.FindAsync(gbf.In(c=>c.Id, oids))).ToListAsync();
+        var oids = ids.Select(ObjectId.Parse).ToList();
+        var fi = await (await Bucket.FindAsync(gbf.In(c => c.Id, oids))).ToListAsync();
         var fids = fi.Select(c => new
         {
             Id = c.Id.ToString(),
             FileName = c.Filename
         }).ToArray();
+
         Task DeleteSingleFile()
         {
             foreach (var item in fids)
@@ -144,6 +142,7 @@ public class GridFSController : ControllerBase
             }
             return Task.CompletedTask;
         }
+
         _ = fids.Length > 6 ? Task.Run(DeleteSingleFile) : DeleteSingleFile();
         return fids.Select(c => c.FileName);
     }

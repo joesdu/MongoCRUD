@@ -3,15 +3,10 @@ using MongoCRUD.Models;
 using MongoDB.Driver;
 
 namespace MongoCRUD.Controllers;
-[ApiController, Route("api/[controller]")]
-public class MongoCrudController : ControllerBase
-{
-    private readonly DbContext _db;
-    public MongoCrudController(DbContext db)
-    {
-        _db = db;
-    }
 
+[ApiController, Route("api/[controller]")]
+public class MongoCrudController(DbContext db) : ControllerBase
+{
     private readonly FilterDefinitionBuilder<Person> _bf = Builders<Person>.Filter;
     private readonly UpdateDefinitionBuilder<Person> _bu = Builders<Person>.Update;
 
@@ -27,7 +22,7 @@ public class MongoCrudController : ControllerBase
             Gender = Gender.女,
             Index = 0
         };
-        await _db.Person.InsertOneAsync(person);
+        await db.Person.InsertOneAsync(person);
         Console.WriteLine(person.Id);
         return person;
     }
@@ -47,41 +42,39 @@ public class MongoCrudController : ControllerBase
                 Index = i
             });
         }
-        await _db.Person.InsertManyAsync(list);
+        await db.Person.InsertManyAsync(list);
         return list;
     }
 
     [HttpGet("All")]
-    public async Task<IEnumerable<Person>> FindAll()
-    {
+    public async Task<IEnumerable<Person>> FindAll() =>
         // return await _db.Person.Find("{}").ToListAsync();
         // 两种写法等效,但是并不建议在C#中直接写JSON字符串查询,除非一些特殊情况.
-        return await _db.Person.Find(_bf.Empty).ToListAsync();
-    }
+        await db.Person.Find(_bf.Empty).ToListAsync();
 
     [HttpGet("IndexIs0")]
     public async Task<IEnumerable<Person>> FindIndexIs0()
     {
-        return await _db.Person.Find(_bf.Eq(c => c.Index, 0)).ToListAsync();
+        return await db.Person.Find(_bf.Eq(c => c.Index, 0)).ToListAsync();
     }
 
     [HttpPut("One/{index:int}")]
     public async Task UpdateOne(int index)
     {
         // 展示拉姆达表达式的条件方式,以及第三个可选参数的配置.
-        _ = await _db.Person.UpdateOneAsync(c => c.Index == index, _bu.Set(c => c.Age, 17), new() { IsUpsert = true });
+        _ = await db.Person.UpdateOneAsync(c => c.Index == index, _bu.Set(c => c.Age, 17), new() { IsUpsert = true });
     }
 
     [HttpPut("IndexIs0")]
     public async Task UpdateIndexIs0()
     {
-        _ = await _db.Person.UpdateManyAsync(_bf.Eq(c => c.Index, 0), _bu.Set(c => c.Name, "李四"));
+        _ = await db.Person.UpdateManyAsync(_bf.Eq(c => c.Index, 0), _bu.Set(c => c.Name, "李四"));
     }
 
     [HttpDelete("One/{index:int}")]
     public async Task DeleteOne(int index)
     {
-        _ = await _db.Person.DeleteOneAsync(c => c.Index == index);
+        _ = await db.Person.DeleteOneAsync(c => c.Index == index);
         // 两种写法等效
         //_ = await _db.Person.DeleteOneAsync(_bf.Eq(c => c.Index, index));
     }
@@ -90,7 +83,7 @@ public class MongoCrudController : ControllerBase
     public async Task DeleteMany()
     {
         var indexs = new[] { 12, 25, 14, 36, 95, 42 };
-        _ = await _db.Person.DeleteManyAsync(c => indexs.Contains(c.Index));
+        _ = await db.Person.DeleteManyAsync(c => indexs.Contains(c.Index));
         // 两种写法等效.
         //_ = await _db.Person.DeleteManyAsync(_bf.In(c => c.Index, indexs));
     }
