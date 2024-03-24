@@ -1,3 +1,4 @@
+using EasilyNET.Core.Enums;
 using Microsoft.AspNetCore.Mvc;
 using MongoCRUD.Models;
 using MongoDB.Driver;
@@ -19,7 +20,7 @@ public class MongoCrudController(DbContext db) : ControllerBase
             Name = "张三",
             Age = 20,
             Birthday = DateOnly.FromDateTime(DateTime.Now),
-            Gender = Gender.女,
+            Gender = EGender.女,
             Index = 0
         };
         await db.Person.InsertOneAsync(person);
@@ -38,7 +39,7 @@ public class MongoCrudController(DbContext db) : ControllerBase
                 Name = "张三",
                 Age = 20 + i,
                 Birthday = DateOnly.FromDateTime(DateTime.Now),
-                Gender = i % 2 == 0 ? Gender.女 : Gender.男,
+                Gender = i % 2 == 0 ? EGender.女 : EGender.男,
                 Index = i
             });
         }

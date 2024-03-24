@@ -1,4 +1,5 @@
-﻿using EasilyNET.Mongo.Core;
+﻿using EasilyNET.Core.Enums;
+using EasilyNET.Mongo.Core;
 using Microsoft.AspNetCore.Mvc;
 using MongoCRUD.Models;
 using MongoDB.Bson;
@@ -26,7 +27,7 @@ public class MongoArrayController(DbContext db) : ControllerBase
                     Index = 0,
                     Name = "野比大助",
                     Age = 40,
-                    Gender = Gender.男,
+                    Gender = EGender.男,
                     Birthday = DateOnly.ParseExact("1943-01-24", "yyyy-MM-dd")
                 },
                 new()
@@ -35,7 +36,7 @@ public class MongoArrayController(DbContext db) : ControllerBase
                     Index = 1,
                     Name = "野比玉子",
                     Age = 34,
-                    Gender = Gender.女,
+                    Gender = EGender.女,
                     Birthday = DateOnly.ParseExact("1941-09-30", "yyyy-MM-dd")
                 },
                 new()
@@ -44,7 +45,7 @@ public class MongoArrayController(DbContext db) : ControllerBase
                     Index = 2,
                     Name = "野比大雄",
                     Age = 10,
-                    Gender = Gender.男,
+                    Gender = EGender.男,
                     Birthday = DateOnly.ParseExact("1964-08-07", "yyyy-MM-dd")
                 },
                 new()
@@ -53,7 +54,7 @@ public class MongoArrayController(DbContext db) : ControllerBase
                     Index = 3,
                     Name = "哆啦A梦",
                     Age = 1,
-                    Gender = Gender.男,
+                    Gender = EGender.男,
                     Birthday = DateOnly.ParseExact("2112-09-03", "yyyy-MM-dd")
                 }
             ]
@@ -71,7 +72,7 @@ public class MongoArrayController(DbContext db) : ControllerBase
             Index = 4,
             Name = "哆啦美",
             Age = 1,
-            Gender = Gender.女,
+            Gender = EGender.女,
             Birthday = DateOnly.ParseExact("2114-12-02", "yyyy-MM-dd")
         };
         await db.FamilyInfo.UpdateOneAsync(c => c.Name == "野比家", _bu.Push(c => c.Members, dorami));
