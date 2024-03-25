@@ -1,4 +1,5 @@
 ﻿using EasilyNET.Core.Enums;
+using EasilyNET.Core.Misc;
 using EasilyNET.Mongo.Core;
 using Microsoft.AspNetCore.Mvc;
 using MongoCRUD.Models;
@@ -11,55 +12,154 @@ namespace MongoCRUD.Controllers;
 [Route("api/[controller]"), ApiController]
 public class MongoArrayController(DbContext db) : ControllerBase
 {
+    private readonly FilterDefinitionBuilder<FamilyInfo> _bf = Builders<FamilyInfo>.Filter;
     private readonly UpdateDefinitionBuilder<FamilyInfo> _bu = Builders<FamilyInfo>.Update;
 
     [HttpPost("Init")]
-    public async Task<FamilyInfo> Init()
+    public async Task<List<FamilyInfo>> Init()
     {
-        var obj = new FamilyInfo
+        var obj = new List<FamilyInfo>
         {
-            Name = "野比家",
-            Members =
-            [
-                new()
-                {
-                    Id = ObjectId.GenerateNewId().ToString(),
-                    Index = 0,
-                    Name = "野比大助",
-                    Age = 40,
-                    Gender = EGender.男,
-                    Birthday = DateOnly.ParseExact("1943-01-24", "yyyy-MM-dd")
-                },
-                new()
-                {
-                    Id = ObjectId.GenerateNewId().ToString(),
-                    Index = 1,
-                    Name = "野比玉子",
-                    Age = 34,
-                    Gender = EGender.女,
-                    Birthday = DateOnly.ParseExact("1941-09-30", "yyyy-MM-dd")
-                },
-                new()
-                {
-                    Id = ObjectId.GenerateNewId().ToString(),
-                    Index = 2,
-                    Name = "野比大雄",
-                    Age = 10,
-                    Gender = EGender.男,
-                    Birthday = DateOnly.ParseExact("1964-08-07", "yyyy-MM-dd")
-                },
-                new()
-                {
-                    Id = ObjectId.GenerateNewId().ToString(),
-                    Index = 3,
-                    Name = "哆啦A梦",
-                    Age = 1,
-                    Gender = EGender.男,
-                    Birthday = DateOnly.ParseExact("2112-09-03", "yyyy-MM-dd")
-                }
-            ]
+            new()
+            {
+                Name = "哆啦A梦",
+                Members =
+                [
+                    new()
+                    {
+                        Id = ObjectId.GenerateNewId().ToString(),
+                        Index = 0,
+                        Name = "野比大助",
+                        Age = 40,
+                        Gender = EGender.男,
+                        Birthday = DateOnly.ParseExact("1943-01-24", "yyyy-MM-dd")
+                    },
+                    new()
+                    {
+                        Id = ObjectId.GenerateNewId().ToString(),
+                        Index = 1,
+                        Name = "野比玉子",
+                        Age = 34,
+                        Gender = EGender.女,
+                        Birthday = DateOnly.ParseExact("1941-09-30", "yyyy-MM-dd")
+                    },
+                    new()
+                    {
+                        Id = ObjectId.GenerateNewId().ToString(),
+                        Index = 2,
+                        Name = "野比大雄",
+                        Age = 10,
+                        Gender = EGender.男,
+                        Birthday = DateOnly.ParseExact("1964-08-07", "yyyy-MM-dd")
+                    },
+                    new()
+                    {
+                        Id = ObjectId.GenerateNewId().ToString(),
+                        Index = 3,
+                        Name = "哆啦A梦",
+                        Age = 1,
+                        Gender = EGender.男,
+                        Birthday = DateOnly.ParseExact("2112-09-03", "yyyy-MM-dd")
+                    }
+                ]
+            },
+            new()
+            {
+                Name = "蜡笔小新",
+                Members =
+                [
+                    new()
+                    {
+                        Id = ObjectId.GenerateNewId().ToString(),
+                        Index = 0,
+                        Name = "野原广志",
+                        Age = 35,
+                        Gender = EGender.男,
+                        Birthday = DateOnly.ParseExact("1963-09-27", "yyyy-MM-dd")
+                    },
+                    new()
+                    {
+                        Id = ObjectId.GenerateNewId().ToString(),
+                        Index = 1,
+                        Name = "野原美冴",
+                        Age = 29,
+                        Gender = EGender.女,
+                        Birthday = DateOnly.ParseExact("1969-10-10", "yyyy-MM-dd")
+                    },
+                    new()
+                    {
+                        Id = ObjectId.GenerateNewId().ToString(),
+                        Index = 2,
+                        Name = "野原新之助",
+                        Age = 5,
+                        Gender = EGender.男,
+                        Birthday = DateOnly.ParseExact("1994-07-22", "yyyy-MM-dd")
+                    },
+                    new()
+                    {
+                        Id = ObjectId.GenerateNewId().ToString(),
+                        Index = 3,
+                        Name = "野原向日葵",
+                        Age = 1,
+                        Gender = EGender.女,
+                        Birthday = DateOnly.ParseExact("1998-09-27", "yyyy-MM-dd")
+                    }
+                ]
+            },
+            new()
+            {
+                Name = "猫和老鼠",
+                Members =
+                [
+                    new()
+                    {
+                        Id = ObjectId.GenerateNewId().ToString(),
+                        Index = 0,
+                        Name = "Tom",
+                        Age = 84,
+                        Gender = EGender.男,
+                        Birthday = DateOnly.ParseExact("1940-02-10", "yyyy-MM-dd")
+                    },
+                    new()
+                    {
+                        Id = ObjectId.GenerateNewId().ToString(),
+                        Index = 1,
+                        Name = "Jerry",
+                        Age = 84,
+                        Gender = EGender.男,
+                        Birthday = DateOnly.ParseExact("1940-02-10", "yyyy-MM-dd")
+                    },
+                    new()
+                    {
+                        Id = ObjectId.GenerateNewId().ToString(),
+                        Index = 2,
+                        Name = "Spike",
+                        Age = 82,
+                        Gender = EGender.男,
+                        Birthday = DateOnly.ParseExact("1942-04-18", "yyyy-MM-dd")
+                    },
+                    new()
+                    {
+                        Id = ObjectId.GenerateNewId().ToString(),
+                        Index = 3,
+                        Name = "Tyke",
+                        Age = 70,
+                        Gender = EGender.男,
+                        Birthday = DateOnly.ParseExact("1953-09-03", "yyyy-MM-dd")
+                    },
+                    new()
+                    {
+                        Id = ObjectId.GenerateNewId().ToString(),
+                        Index = 4,
+                        Name = "Nibbles",
+                        Age = 77,
+                        Gender = EGender.男,
+                        Birthday = DateOnly.ParseExact("1946-05-08", "yyyy-MM-dd")
+                    }
+                ]
+            }
         };
-        await db.FamilyInfo.InsertOneAsync(obj);
+        await db.FamilyInfo.InsertManyAsync(obj);
         return obj;
     }
 
@@ -84,8 +184,17 @@ public class MongoArrayController(DbContext db) : ControllerBase
     {
         // 这里我们举得例子是将哆啦美的名字变更为日文名字.
         // 这里我们假设查询参数同样是通过参数传入的,所以我们写出了如下代码.
-        await db.FamilyInfo.UpdateOneAsync(c => (c.Name == "野比家") & c.Members.Any(s => s.Index == 4),
-            _bu.Set(c => c.Members.FirstMatchingElement().Name, "ドラミ"));
+        //await db.FamilyInfo.UpdateOneAsync(c => (c.Name == "野比家") & c.Members.Any(s => s.Index == 4),
+        //    _bu.Set(c => c.Members.FirstMatchingElement().Name, "ドラミ"));
+        await db.FamilyInfo.UpdateOneAsync(_bf.Eq(c => c.Name, "蜡笔小新") & _bf.ElemMatch(c => c.Members, s => s.Gender == EGender.女),
+            _bu.Inc(c => c.Members.AllMatchingElements("ele").Age, 100), new()
+            {
+                ArrayFilters =
+                [
+                    //new BsonDocumentArrayFilterDefinition<BsonDocument>(new($"ele.{nameof(Person.Gender).ToLowerCamelCase()}", EGender.女.ToString()))
+                    new BsonDocumentArrayFilterDefinition<BsonDocument>(new($"ele.{nameof(Person.Gender).ToLowerCamelCase()}", EGender.女.ToString()))
+                ]
+            });
     }
 
     [HttpDelete("DeleteOne")]

@@ -1,6 +1,7 @@
 using EasilyNET.Mongo.ConsoleDebug;
 using EasilyNET.MongoSerializer.AspNetCore;
 using MongoCRUD;
+using MongoDB.Bson.Serialization.Serializers;
 using MongoDB.Driver.Linq;
 using Serilog;
 using Serilog.Events;
@@ -36,6 +37,7 @@ builder.Services.AddMongoContext<DbContext>(builder.Configuration, op =>
 // 注册自定义的MongoDB类型序列化
 builder.Services.RegisterSerializer(new DateOnlySerializerAsString());
 builder.Services.RegisterSerializer(new TimeOnlySerializerAsString());
+builder.Services.RegisterSerializer(new GuidSerializer());
 // 注册GridFS
 builder.Services.AddMongoGridFS();
 var app = builder.Build();
