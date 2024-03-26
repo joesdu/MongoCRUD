@@ -186,13 +186,28 @@ public class MongoArrayController(DbContext db) : ControllerBase
         // 这里我们假设查询参数同样是通过参数传入的,所以我们写出了如下代码.
         //await db.FamilyInfo.UpdateOneAsync(c => (c.Name == "野比家") & c.Members.Any(s => s.Index == 4),
         //    _bu.Set(c => c.Members.FirstMatchingElement().Name, "ドラミ"));
+        //await db.FamilyInfo.UpdateOneAsync(_bf.Eq(c => c.Name, "蜡笔小新"),
+        //    _bu.Inc(c => c.Members.AllMatchingElements("ele").Age, 100), new()
+        //    {
+        //        ArrayFilters =
+        //        [
+        //            //new BsonDocumentArrayFilterDefinition<BsonDocument>(new($"ele.{nameof(Person.Gender).ToLowerCamelCase()}", EGender.女.ToString()))
+        //            new BsonDocumentArrayFilterDefinition<Person>(new($"ele.{nameof(Person.Age).ToLowerCamelCase()}", new BsonDocument("$lt", 1000)))
+        //        ]
+        //    });
         await db.FamilyInfo.UpdateOneAsync(_bf.Eq(c => c.Name, "蜡笔小新"),
             _bu.Inc(c => c.Members.AllMatchingElements("ele").Age, 100), new()
             {
                 ArrayFilters =
                 [
                     //new BsonDocumentArrayFilterDefinition<BsonDocument>(new($"ele.{nameof(Person.Gender).ToLowerCamelCase()}", EGender.女.ToString()))
-                    new BsonDocumentArrayFilterDefinition<Person>(new($"ele.{nameof(Person.Age).ToLowerCamelCase()}", new BsonDocument("$lt", 1000)))
+                    new JsonArrayFilterDefinition<BsonDocument>(new($$"""
+                                                                      {
+                                                                        "ele.{{nameof(Person.Age).ToLowerCamelCase()}}" : {
+                                                                          "$lt" : {{1000}}
+                                                                        }
+                                                                      }
+                                                                      """))
                 ]
             });
     }
