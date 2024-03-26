@@ -8,7 +8,7 @@ using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Ìí¼ÓSerilogÅäÖÃ
+// æ·»åŠ Serilogé…ç½®
 builder.Host.UseSerilog((hbc, lc) =>
 {
     const LogEventLevel logLevel = LogEventLevel.Information;
@@ -23,7 +23,7 @@ builder.Services.AddControllers().AddJsonOptions(c => c.JsonSerializerOptions.Co
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-// ×¢²áMongoDBµÄÒ»Ğ©¶«Î÷
+// æ³¨å†ŒMongoDBçš„ä¸€äº›ä¸œè¥¿
 builder.Services.AddMongoContext<DbContext>(builder.Configuration, op =>
 {
     op.ClientSettings = cs =>
@@ -33,10 +33,10 @@ builder.Services.AddMongoContext<DbContext>(builder.Configuration, op =>
     };
     op.DefaultConventionRegistry = true;
 });
-// ×¢²á×Ô¶¨ÒåµÄMongoDBÀàĞÍĞòÁĞ»¯
+// æ³¨å†Œè‡ªå®šä¹‰çš„MongoDBç±»å‹åºåˆ—åŒ–
 builder.Services.RegisterSerializer(new DateOnlySerializerAsString());
 builder.Services.RegisterSerializer(new TimeOnlySerializerAsString());
-// ×¢²áGridFS
+// æ³¨å†ŒGridFS
 builder.Services.AddMongoGridFS();
 var app = builder.Build();
 

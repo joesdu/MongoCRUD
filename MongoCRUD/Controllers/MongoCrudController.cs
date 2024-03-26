@@ -14,13 +14,13 @@ public class MongoCrudController(DbContext db) : ControllerBase
     [HttpPost("One")]
     public async Task<Person> InsertOne()
     {
-        // ÕâÀïÎÒÃÇ²»ĞèÒªÎª Id ×Ö¶Î¸³Öµ,ÒòÎª²åÈë³É¹¦ºó,»á×Ô¶¯ÎªId×Ö¶Î°ó¶¨Öµ.
+        // è¿™é‡Œæˆ‘ä»¬ä¸éœ€è¦ä¸º Id å­—æ®µèµ‹å€¼,å› ä¸ºæ’å…¥æˆåŠŸå,ä¼šè‡ªåŠ¨ä¸ºIdå­—æ®µç»‘å®šå€¼.
         var person = new Person
         {
-            Name = "ÕÅÈı",
+            Name = "å¼ ä¸‰",
             Age = 20,
             Birthday = DateOnly.FromDateTime(DateTime.Now),
-            Gender = EGender.Å®,
+            Gender = EGender.å¥³,
             Index = 0
         };
         await db.Person.InsertOneAsync(person);
@@ -36,10 +36,10 @@ public class MongoCrudController(DbContext db) : ControllerBase
         {
             list.Add(new()
             {
-                Name = "ÕÅÈı",
+                Name = "å¼ ä¸‰",
                 Age = 20 + i,
                 Birthday = DateOnly.FromDateTime(DateTime.Now),
-                Gender = i % 2 == 0 ? EGender.Å® : EGender.ÄĞ,
+                Gender = i % 2 == 0 ? EGender.å¥³ : EGender.ç”·,
                 Index = i
             });
         }
@@ -50,7 +50,7 @@ public class MongoCrudController(DbContext db) : ControllerBase
     [HttpGet("All")]
     public async Task<IEnumerable<Person>> FindAll() =>
         // return await _db.Person.Find("{}").ToListAsync();
-        // Á½ÖÖĞ´·¨µÈĞ§,µ«ÊÇ²¢²»½¨ÒéÔÚC#ÖĞÖ±½ÓĞ´JSON×Ö·û´®²éÑ¯,³ı·ÇÒ»Ğ©ÌØÊâÇé¿ö.
+        // ä¸¤ç§å†™æ³•ç­‰æ•ˆ,ä½†æ˜¯å¹¶ä¸å»ºè®®åœ¨C#ä¸­ç›´æ¥å†™JSONå­—ç¬¦ä¸²æŸ¥è¯¢,é™¤éä¸€äº›ç‰¹æ®Šæƒ…å†µ.
         await db.Person.Find(_bf.Empty).ToListAsync();
 
     [HttpGet("IndexIs0")]
@@ -62,21 +62,21 @@ public class MongoCrudController(DbContext db) : ControllerBase
     [HttpPut("One/{index:int}")]
     public async Task UpdateOne(int index)
     {
-        // Õ¹Ê¾À­Ä·´ï±í´ïÊ½µÄÌõ¼ş·½Ê½,ÒÔ¼°µÚÈı¸ö¿ÉÑ¡²ÎÊıµÄÅäÖÃ.
+        // å±•ç¤ºæ‹‰å§†è¾¾è¡¨è¾¾å¼çš„æ¡ä»¶æ–¹å¼,ä»¥åŠç¬¬ä¸‰ä¸ªå¯é€‰å‚æ•°çš„é…ç½®.
         _ = await db.Person.UpdateOneAsync(c => c.Index == index, _bu.Set(c => c.Age, 17), new() { IsUpsert = true });
     }
 
     [HttpPut("IndexIs0")]
     public async Task UpdateIndexIs0()
     {
-        _ = await db.Person.UpdateManyAsync(_bf.Eq(c => c.Index, 0), _bu.Set(c => c.Name, "ÀîËÄ"));
+        _ = await db.Person.UpdateManyAsync(_bf.Eq(c => c.Index, 0), _bu.Set(c => c.Name, "æå››"));
     }
 
     [HttpDelete("One/{index:int}")]
     public async Task DeleteOne(int index)
     {
         _ = await db.Person.DeleteOneAsync(c => c.Index == index);
-        // Á½ÖÖĞ´·¨µÈĞ§
+        // ä¸¤ç§å†™æ³•ç­‰æ•ˆ
         //_ = await _db.Person.DeleteOneAsync(_bf.Eq(c => c.Index, index));
     }
 
@@ -85,7 +85,7 @@ public class MongoCrudController(DbContext db) : ControllerBase
     {
         var indexs = new[] { 12, 25, 14, 36, 95, 42 };
         _ = await db.Person.DeleteManyAsync(c => indexs.Contains(c.Index));
-        // Á½ÖÖĞ´·¨µÈĞ§.
+        // ä¸¤ç§å†™æ³•ç­‰æ•ˆ.
         //_ = await _db.Person.DeleteManyAsync(_bf.In(c => c.Index, indexs));
     }
 }
