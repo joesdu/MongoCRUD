@@ -28,6 +28,6 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: artifacts
-          path: ./artifacts/**/*
+          path: /home/runner/work/MongoCRUD/MongoCRUD/MongoCRUD/artifacts/**/*
 
           
