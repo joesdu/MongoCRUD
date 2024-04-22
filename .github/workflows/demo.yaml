@@ -22,15 +22,12 @@ jobs:
         run: dotnet restore
       - name: Build
         run: dotnet build --no-restore -c Release
-      - name: Creat Artifacts
-        run: mkdir -p /artifacts && chmod 777 /artifacts
-        shell: sh
       - name: Publish
-        run: cd MongoCRUD && dotnet publish --no-restore -c Release -o /artifacts /p:UseAppHost=false
+        run: cd MongoCRUD && dotnet publish --no-restore -c Release -o ./artifacts /p:UseAppHost=false
       - name: Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: artifacts
-          path: artifacts/**/*
+          path: ./artifacts/**/*
 
           
