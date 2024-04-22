@@ -2,6 +2,8 @@ name: Release
 
 on: [push]
 
+env:
+  DOTNET_VERSION: "9.0.x"
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -15,15 +17,20 @@ jobs:
       - name: Setup .Net SDK
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 9.0.x
+          dotnet-version: ${{ env.DOTNET_VERSION }}
       - name: Restore
         run: dotnet restore
       - name: Build
         run: dotnet build --no-restore -c Release
+      - name: Creat Artifacts
+        run: mkdir -p /artifacts && chmod 777 /artifacts
+        shell: sh
       - name: Publish
-        run: cd MongoCRUD && dotnet publish --no-restore -c Release /p:UseAppHost=false
+        run: cd MongoCRUD && dotnet publish --no-restore -c Release -o /artifacts /p:UseAppHost=false
       - name: Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: artifacts
-          path: /bin/Release/net9.0/publish/*
+          path: artifacts/**/*
+
+          
