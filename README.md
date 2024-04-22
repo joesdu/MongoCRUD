@@ -21,3 +21,5 @@ docker run --name mongo1 -p 27017:27017 -d --rm -it -e MONGO_INITDB_ROOT_USERNAM
 MongoDB 单节点的数据库无法使用事务.所以测试 `TransactionController` 中的接口会报错.可以使用副本集或者分片集群的数据库实例来进行测试.
 
 至于本地利用 Docker 的方式来部署 MongoDB 副本集集群,可以利用先学习下 MongoDB 相关的部署教程再操作.(过程教复杂,这里不写了.要写的话,又能出一篇教程了 😂)
+
+新增 GitHub Actions 用来测试 Gitea 的 Actions
