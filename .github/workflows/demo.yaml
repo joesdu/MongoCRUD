@@ -21,9 +21,9 @@ jobs:
       - name: Build
         run: dotnet build --no-restore -c Release
       - name: Publish
-        run: cd MongoCRUD && dotnet publish --no-restore -c Release -o /artifacts /p:UseAppHost=false
+        run: cd MongoCRUD && dotnet publish --no-restore -c Release /p:UseAppHost=false
       - name: Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: artifacts
-          path: /artifacts/**/*
+          path: /bin/Release/net9.0/publish/**/*
