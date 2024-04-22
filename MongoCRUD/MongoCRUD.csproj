@@ -8,14 +8,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="EasilyNET.Core" Version="2.2.4" />
-    <PackageReference Include="EasilyNET.Mongo.AspNetCore" Version="2.2.4" />
-    <PackageReference Include="EasilyNET.Mongo.ConsoleDebug" Version="2.2.4" />
-    <PackageReference Include="EasilyNET.MongoGridFS.AspNetCore" Version="2.2.4" />
-    <PackageReference Include="EasilyNET.MongoSerializer.AspNetCore" Version="2.2.4" />
-    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.0-preview.2.24128.4" />
-    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.20.0-Preview.1" />
-    <PackageReference Include="Serilog.AspNetCore" Version="8.0.2-dev-00336" />
+    <PackageReference Include="EasilyNET.Core" Version="2.2.72" />
+    <PackageReference Include="EasilyNET.Mongo.AspNetCore" Version="2.2.72" />
+    <PackageReference Include="EasilyNET.Mongo.ConsoleDebug" Version="2.2.72" />
+    <PackageReference Include="EasilyNET.MongoGridFS.AspNetCore" Version="2.2.72" />
+    <PackageReference Include="EasilyNET.MongoSerializer.AspNetCore" Version="2.2.72" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.0-preview.3.24172.13" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.20.1" />
+    <PackageReference Include="Serilog.AspNetCore" Version="8.0.2-dev-00338" />
     <PackageReference Include="Serilog.Sinks.Async" Version="1.5.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
